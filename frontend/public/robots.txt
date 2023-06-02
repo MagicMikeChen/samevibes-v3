@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /*/testpurchase/
+Sitemap: https://www.stopflyingsolo.website/sitemap.xml
