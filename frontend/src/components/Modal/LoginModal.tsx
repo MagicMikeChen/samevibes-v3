@@ -1,29 +1,34 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { closePopupModal } from '../../../store/actionCreators/systemAction';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { closePopupModal } from "../../../store/actionCreators/systemAction";
 
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper';
-import { FaSpotify } from 'react-icons/fa';
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
+import { FaSpotify } from "react-icons/fa";
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 interface LoginModalProps {
   classNameProps?: string;
 }
 const loginBgList = [
-  { type: '', src: '/img/bg-login-1.jpg' },
-  { type: '', src: '/img/bg-login-2.jpg' },
-  { type: '', src: '/img/bg-login-3.jpg' },
-  { type: '', src: '/img/bg-login-4.jpg' },
+  { type: "", src: "/img/bg-login-1.jpg" },
+  { type: "", src: "/img/bg-login-2.jpg" },
+  { type: "", src: "/img/bg-login-3.jpg" },
+  { type: "", src: "/img/bg-login-4.jpg" },
 ];
+const AUTH_URL =
+  "https://accounts.spotify.com/authorize?client_id=ee3a21d7d55a451488113ff042b02787&response_type=code&redirect_uri=http://localhost:3000/with-spotify&scope=user-read-email%20user-read-private%20user-read-playback-state%20user-top-read%20playlist-read-private%20playlist-read-collaborative%20user-top-read%20user-library-read";
 const LoginModal = (props: LoginModalProps) => {
   const { classNameProps } = props;
   const dispatch = useDispatch();
 
   const handleCloseModal = () => {
     dispatch(closePopupModal());
+  };
+  const handleSpotifyLogin = () => {
+    window.open(AUTH_URL, "_self");
   };
   return (
     <div
@@ -59,7 +64,10 @@ const LoginModal = (props: LoginModalProps) => {
           </Swiper>
         </div>
         <div className="flex w-1/2 flex-col items-center justify-center px-4 md:px-12">
-          <div className="fb-14 text-spotify-green flex h-[48px] w-full cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-80 px-8 text-center dark:bg-opacity-30 md:h-[60px]">
+          <div
+            className="fb-14 text-spotify-green flex h-[48px] w-full cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-80 px-8 text-center dark:bg-opacity-30 md:h-[60px]"
+            onClick={handleSpotifyLogin}
+          >
             <FaSpotify className="text-spotify-green text-lg md:text-4xl"></FaSpotify>
             <div className="h5 ml-4">Login with Spotify</div>
           </div>

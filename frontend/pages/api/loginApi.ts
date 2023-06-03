@@ -16,6 +16,17 @@ const LoginApi = {
             return false;
         }
     },
+    spotifyLogin: async (code) => {
+        try {
+            const res = await apiClient.post('/api/login-spotify', {
+                code
+            })
+            return res;
+        } catch (err: any) {
+            console.warn('spotifyLogin went wrong', err)
+            return err;
+        }
+    }
 }
 
 export default LoginApi;
