@@ -5,6 +5,7 @@ import { closePopupModal } from "../../../store/actionCreators/systemAction";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import { FaSpotify } from "react-icons/fa";
+import { useRouter } from 'next/router';
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -21,11 +22,13 @@ const loginBgList = [
 const AUTH_URL =
   "https://accounts.spotify.com/authorize?client_id=ee3a21d7d55a451488113ff042b02787&response_type=code&redirect_uri=http://localhost:3000/with-spotify&scope=user-read-email%20user-read-private%20user-read-playback-state%20user-top-read%20playlist-read-private%20playlist-read-collaborative%20user-top-read%20user-library-read";
 const LoginModal = (props: LoginModalProps) => {
+  const router = useRouter();
   const { classNameProps } = props;
   const dispatch = useDispatch();
 
   const handleCloseModal = () => {
     dispatch(closePopupModal());
+    router.push('/');
   };
   const handleSpotifyLogin = () => {
     window.open(AUTH_URL, "_self");

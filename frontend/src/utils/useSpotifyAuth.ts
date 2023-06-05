@@ -11,7 +11,7 @@ export default function useSpotifyAuth(code='') {
   useEffect(() => {
     const spotifyLogin = async () => {
       try {
-        if (code.length > 0) {
+        if (code?.length > 0) {
           const res = await LoginApi.spotifyLogin(code);
           setAccessToken(res.data.accessToken);
           setRefreshToken(res.data.refreshToken);

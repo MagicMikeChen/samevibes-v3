@@ -32,6 +32,7 @@ const DropdownMenu = () => {
     <div className="relative ml-4 px-2 h-full flex items-center">
       <div
         className={`h6 flex cursor-pointer justify-center items-center text-mgray-400 cs-border-btn-t-100 rounded-xl px-2 py-1`}
+        onClick={handleShowDropdown}
       >
         <div
           className={`flex text-lg font-medium items-center transition-colors duration-300 hover:text-gray-600 dark:hover:text-white ${
@@ -39,7 +40,7 @@ const DropdownMenu = () => {
               ? 'text-gray-900 dark:text-white'
               : 'text-gray-400 dark:text-gray-400 '
           }`}
-          onClick={handleShowDropdown}
+          
         >
           <IoSettingsSharp className="cursor-pointer text-xl mr-1 "></IoSettingsSharp>
           Setting 

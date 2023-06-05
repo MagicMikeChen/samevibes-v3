@@ -1,19 +1,21 @@
-import { Action, ActionTypes } from '../actionTypes';
-import { ISystemReducer } from '../reducerTypes';
+import { Action, ActionTypes } from "../actionTypes";
+import { ISystemReducer } from "../reducerTypes";
 
 const initialState = {
   isLogin: false,
-  userToken: '',
+  userToken: "",
   isShowPlayer: false,
   isAudioPlay: false,
-  modal: { isPopupLoading: false, isPopupModalShow: false, type: '' },
+  accessToken: "",
+  userSpotifyId: "",
+  modal: { isPopupLoading: false, isPopupModalShow: false, type: "" },
   audioTrackObj: {
-    audioSrc: '',
-    audioTitle: '',
-    audioImage: '',
-    album: '',
-    artist: '',
-    audioType: '',
+    audioSrc: "",
+    audioTitle: "",
+    audioImage: "",
+    album: "",
+    artist: "",
+    audioType: "",
   },
   error: null,
 };
@@ -81,6 +83,18 @@ export const systemReducer = (
       return {
         ...state,
         isShowPlayer: action.payload,
+        error: null,
+      };
+    case Action.SET_ACESS_TOKEN:
+      return {
+        ...state,
+        accessToken: action.payload,
+        error: null,
+      };
+    case Action.SET_USER_SPOTIFY_ID:
+      return {
+        ...state,
+        userSpotifyId: action.payload,
         error: null,
       };
     default:

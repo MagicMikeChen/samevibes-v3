@@ -35,23 +35,24 @@ const Homepage = () => {
         <div className="flex flex-col-reverse justify-between lg:flex-row">
           <div className="flex-col lg:w-8/12">
             <div className="md:cs-post-scroll-height no-scrollbar pb-20 pt-20 lg:overflow-y-auto">
-              {postsState.posts.map((postItem) => {
-                return (
-                  <motion.div
-                    key={`${postItem._id} post`}
-                    className="mb-4"
-                    initial="initial"
-                    animate="enter"
-                    exit="exit"
-                    variants={toTopVariants}
-                  >
-                    <PostContent
-                      postItem={postItem}
-                      isNotHome={false}
-                    ></PostContent>
-                  </motion.div>
-                );
-              })}
+              {postsState.posts.length > 0 &&
+                postsState.posts.map((postItem) => {
+                  return (
+                    <motion.div
+                      key={`${postItem._id} post`}
+                      className="mb-4"
+                      initial="initial"
+                      animate="enter"
+                      exit="exit"
+                      variants={toTopVariants}
+                    >
+                      <PostContent
+                        postItem={postItem}
+                        isNotHome={false}
+                      ></PostContent>
+                    </motion.div>
+                  );
+                })}
             </div>
           </div>
           <div className="h-full flex-col pt-4 lg:w-4/12">

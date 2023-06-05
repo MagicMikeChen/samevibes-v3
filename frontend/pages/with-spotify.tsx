@@ -7,35 +7,55 @@ import { toTopVariants } from "../src/common/AniVarients";
 import useSpotifyAuth from "../src/utils/useSpotifyAuth";
 import SpotifyWebApi from "spotify-web-api-node";
 import SpotifyApi from "../pages/api/spotifyApi";
+import { setAcessToken, setLogin, setUserSpotifyId, setPopupModal } from "../store/actionCreators/systemAction";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/reducers";
+
+
 const WithSpotify: NextPage = () => {
+  const dispatch = useDispatch();
+  const { accessToken, userSpotifyId } = useSelector(
+    (state: RootState) => state.systemReducer
+  );
   const [code, setCode] = useState("");
   const [topArtists, setTopArtists] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
-  const accessToken = useSpotifyAuth(code);
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT,
   });
-  useEffect(() => {
-    console.log("accessToken", accessToken);
-    if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
-  }, [accessToken]);
+  const spotifyToken = useSpotifyAuth(code);
 
   useEffect(() => {
     const newCode = new URLSearchParams(window.location.search).get("code");
     setCode(newCode);
   }, []);
+
+  useEffect(() => {
+    if (spotifyToken?.length > 0) {
+      dispatch(setAcessToken(spotifyToken));
+      dispatch(setLogin());
+    }
+  }, [spotifyToken]);
   const handleGetMyTop = async () => {
     spotifyApi.setAccessToken(accessToken);
-    /* Get a User’s Top Artists*/
-    // const res = await SpotifyApi.getMyTop();
-    // console.log("getMyTopArtists", res);
 
+    // Get the authenticated user
+    spotifyApi.getMe().then(
+      function (data) {
+        console.log("getUserInfo", data.body);
+        dispatch(setUserSpotifyId(data.body.id))
+      },
+      function (err) {
+        console.log("Something went wrong!", err);
+        dispatch(setPopupModal("login"));
+      }
+    );
+
+    /* Get a User’s Top Artists*/
     spotifyApi.getMyTopArtists().then(
       function (data) {
         let topArtists = data.body.items;
         setTopArtists(topArtists);
-        console.log("topArtists", topArtists);
       },
       function (err) {
         console.log("Something went wrong!", err);
@@ -47,16 +67,12 @@ const WithSpotify: NextPage = () => {
       function (data) {
         let topTracks = data.body.items;
         setTopTracks(topTracks);
-        console.log("topTracks", topTracks);
       },
       function (err) {
         console.log("Something went wrong!", err);
       }
     );
   };
-  // useEffect(() => {
-  //   handleGetMyTop();
-  // }, []);
 
   return (
     <div className="cs-main-bg-theme">
@@ -73,34 +89,46 @@ const WithSpotify: NextPage = () => {
         exit="exit"
         variants={toTopVariants}
       >
-        <div className="flex justify-center my-8">
-
-        <div
-          className=" cs-border-btn-t-100 w-fit cursor-pointer rounded-xl px-2 py-1 text-lg font-medium text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white"
-          onClick={handleGetMyTop}
-        >
-          Get My Profile
-        </div>
-        </div>
-        <div className="flex justify-around">
-          <div className="flex flex-col">
-            {topArtists.map((artist, i) => {
-              return (
-                <div key={`artist-${i}`}>
-                  {i + 1}.<span> {artist.name}</span>
-                </div>
-              );
-            })}
+        <div className="cs-block-style-white-theme dark:cs-block-style-grey-900 my-8 flex flex-col p-8">
+          <div className="flex justify-center">
+            <div
+              className="cs-border-btn-t-100 my-8 w-fit cursor-pointer rounded-xl px-2 py-1 text-lg font-medium text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white"
+              onClick={handleGetMyTop}
+            >
+              Get My Profile
+            </div>
           </div>
-          <div className="flex flex-col">
-            {topTracks.map((track, i) => {
-              return (
-                <div key={`track-${i}`}>
-                  {i + 1}.<span> {track.name}</span> -{" "}
-                  <span className="text-gray-400">{track.artists[0].name}</span>
-                </div>
-              );
-            })}
+          <div className="flex justify-around">
+            <div className="flex flex-col">
+              {topArtists.map((artist, i) => {
+                return (
+                  <div key={`artist-${i}`}>
+                    {i + 1}.<span> {artist.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-col">
+              <div className="h5 mb-4">Listened the most</div>
+              {topTracks.map((track, i) => {
+                return (
+                  <div key={`track-${i}`} className="mb-3 flex">
+                    <img
+                      src={track.album.images[2].url}
+                      width={32}
+                      height={32}
+                      alt="album cover"
+                      className="mr-4"
+                    ></img>
+                    {i + 1}.<span className="mr-1"> {track.name} </span> -
+                    <span className="ml-1 text-gray-400">
+                      {" "}
+                      {track.artists[0].name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </motion.div>

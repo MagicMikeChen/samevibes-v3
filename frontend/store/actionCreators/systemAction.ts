@@ -77,3 +77,16 @@ export const setPlayerClose = () => async (dispatch: Dispatch<ActionTypes>) => {
     payload: false,
   });
 };
+export const setAcessToken = (token) => async (dispatch: Dispatch<ActionTypes>) => {
+  dispatch({
+    type: Action.SET_ACESS_TOKEN,
+    payload: token,
+  });
+};
+
+export const setUserSpotifyId = (id) => async (dispatch: Dispatch<ActionTypes>) => {
+  dispatch({
+    type: Action.SET_USER_SPOTIFY_ID,
+    payload: id,
+  });
+};

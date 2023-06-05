@@ -86,6 +86,8 @@ export interface ISystemReducer {
   audioTrackObj: IAudioTrack;
   error: string | null;
   modal: IModal;
+  accessToken: string;
+  userSpotifyId: string;
 }
 export interface ICurUser {
   userId?: string;

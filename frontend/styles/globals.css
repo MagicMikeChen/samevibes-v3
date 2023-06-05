@@ -79,6 +79,7 @@
   .cs-border-btn-t-100 {
     border: 0.5px solid rgba(180, 201, 207, 0.5);
     outline: none;
+    transition: all;
   }
   .cs-border-zinc-t-600 {
     border: 1px solid rgba(82, 82, 91, 0.4);

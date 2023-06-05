@@ -1,39 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useSelector, useDispatch } from 'react-redux';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Link as ScrollLink, Element } from 'react-scroll';
-import { MenuItems } from '../../common/NavbarConfigs';
-import { useTheme } from 'next-themes';
-import { translateMaker, changeLanguage } from '../../utils';
-import { setPopupModal } from '../../../store/actionCreators/systemAction';
-import LangSelector from './LangSelector';
-import Settings from './Settings';
-import DropdownMenu from './DropdownMenu';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Link as ScrollLink, Element } from "react-scroll";
+import { MenuItems } from "../../common/NavbarConfigs";
+import { useTheme } from "next-themes";
+import { translateMaker, changeLanguage } from "../../utils";
+import LangSelector from "./LangSelector";
+import Settings from "./Settings";
+import DropdownMenu from "./DropdownMenu";
+import LoginButton from "./LoginButton";
 const Navbar = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const { locale } = router;
   const t = translateMaker(router);
 
-  const { theme, setTheme } = useTheme();
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  const switchTheme = () => {
-    if (isMounted) {
-      setTheme(theme === 'light' ? 'dark' : 'light');
-    }
-  };
-
-  const handlePopup = () => {
-    dispatch(setPopupModal('login'));
-  };
   return (
     <div
-      id="sfs: v1.0.1"
+      id="sv: v3.0.0"
       className="fixed left-0 right-0 top-0 z-30 w-full text-white"
     >
       <nav
@@ -67,8 +50,8 @@ const Navbar = () => {
                             href="#"
                             className={`mr-6 text-lg font-medium hover:text-gray-900 hover:dark:text-white ${
                               router.pathname === item.url
-                                ? 'text-gray-900 dark:text-white'
-                                : 'text-gray-400 dark:text-gray-400'
+                                ? "text-gray-900 dark:text-white"
+                                : "text-gray-400 dark:text-gray-400"
                             }`}
                           >
                             {t[item.label]}
@@ -80,10 +63,8 @@ const Navbar = () => {
                 })}
             </ol>
 
-            <div className="flex cursor-pointer items-center justify-center">
-              <div className="text-lg font-medium text-gray-400 dark:text-gray-400 cs-border-btn-t-100 rounded-xl px-2 py-1" onClick={handlePopup}>
-                Login
-              </div>
+            <div className="flex items-center justify-center">
+              <LoginButton></LoginButton>
               <DropdownMenu></DropdownMenu>
             </div>
           </div>

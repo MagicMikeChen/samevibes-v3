@@ -48,12 +48,9 @@ const User: React.FC<UserProps> = (props) => {
 
   const [isSticky, setSticky] = useState(false);
   const handleEnter = () => {
-    console.log('handleEnter true')
     setSticky(false);
   };
   const handleLeave = () => {
-    console.log('handleEnter false')
-
     setSticky(true);
   };
   return (
