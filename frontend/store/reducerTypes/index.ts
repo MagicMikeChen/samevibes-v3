@@ -36,7 +36,7 @@ export interface IContent {
   audioType?: string | null;
 }
 export interface IPost {
-  _id: string;
+  _id?: string;
   postId: string;
   userId: string;
   userName: string | null;

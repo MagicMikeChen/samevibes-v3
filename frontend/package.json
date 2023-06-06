@@ -1,5 +1,5 @@
 {
-  "name": "stopflyingsolo-marketing-site",
+  "name": "samevibes-frontend",
   "private": true,
   "proxy": "http://localhost:8000",
   "scripts": {
