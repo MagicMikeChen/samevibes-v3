@@ -12,12 +12,16 @@ import postsApi from "../../pages/api/postsApi";
 
 const Homepage = () => {
   const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
 
   const getPosts = async () => {
+    setLoading(true)
     try {
       const res = await postsApi.getPosts();
       dispatch(fetchPosts(res.data));
+      setLoading(false)
     } catch (err) {
+      dispatch(fetchPosts([]));
       console.warn(err);
     }
   };
@@ -27,16 +31,15 @@ const Homepage = () => {
   }, []);
 
   const postsState = useSelector((state: RootState) => state.postsState);
-
   return (
     <div className="container-1 no-scrollbar mx-auto h-full overflow-y-auto lg:overflow-y-hidden">
       <div className="flex-col">
         {/* <ProfileForm/> */}
         <div className="flex flex-col-reverse justify-between lg:flex-row">
           <div className="flex-col lg:w-8/12">
-            <div className="md:cs-post-scroll-height no-scrollbar pb-20 pt-20 lg:overflow-y-auto">
-              {postsState.posts.length > 0 &&
-                postsState.posts.map((postItem) => {
+            {postsState.posts.length > 0 && !isLoading && (
+              <div className="md:cs-post-scroll-height no-scrollbar pb-20 pt-20 lg:overflow-y-auto">
+                {postsState.posts.map((postItem) => {
                   return (
                     <motion.div
                       key={`${postItem._id} post`}
@@ -53,7 +56,8 @@ const Homepage = () => {
                     </motion.div>
                   );
                 })}
-            </div>
+              </div>
+            )}
           </div>
           <div className="h-full flex-col pt-4 lg:w-4/12">
             <motion.div

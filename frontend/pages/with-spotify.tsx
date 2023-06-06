@@ -7,10 +7,15 @@ import { toTopVariants } from "../src/common/AniVarients";
 import useSpotifyAuth from "../src/utils/useSpotifyAuth";
 import SpotifyWebApi from "spotify-web-api-node";
 import SpotifyApi from "../pages/api/spotifyApi";
-import { setAcessToken, setLogin, setUserSpotifyId, setPopupModal } from "../store/actionCreators/systemAction";
+import {
+  setAcessToken,
+  setLogin,
+  setUserSpotifyId,
+  setPopupModal,
+} from "../store/actionCreators/systemAction";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/reducers";
-
+import { Typewriter } from "react-simple-typewriter";
 
 const WithSpotify: NextPage = () => {
   const dispatch = useDispatch();
@@ -20,6 +25,7 @@ const WithSpotify: NextPage = () => {
   const [code, setCode] = useState("");
   const [topArtists, setTopArtists] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
+  const [typingArr, setTypingArr] = useState([]);
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT,
   });
@@ -29,6 +35,13 @@ const WithSpotify: NextPage = () => {
     const newCode = new URLSearchParams(window.location.search).get("code");
     setCode(newCode);
   }, []);
+  useEffect(() => {
+    let newArr = [];
+    topTracks.map((track) => {
+      newArr.push(`${track.name} - ${track.artists[0].name}`);
+    });
+    setTypingArr(newArr);
+  }, [topTracks]);
 
   useEffect(() => {
     if (spotifyToken?.length > 0) {
@@ -43,7 +56,7 @@ const WithSpotify: NextPage = () => {
     spotifyApi.getMe().then(
       function (data) {
         console.log("getUserInfo", data.body);
-        dispatch(setUserSpotifyId(data.body.id))
+        dispatch(setUserSpotifyId(data.body.id));
       },
       function (err) {
         console.log("Something went wrong!", err);
@@ -92,14 +105,33 @@ const WithSpotify: NextPage = () => {
         <div className="cs-block-style-white-theme dark:cs-block-style-grey-900 my-8 flex flex-col p-8">
           <div className="flex justify-center">
             <div
-              className="cs-border-btn-t-100 my-8 w-fit cursor-pointer rounded-xl px-2 py-1 text-lg font-medium text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white"
+              className="cs-border-btn-t-100 my-4 w-fit cursor-pointer rounded-xl px-2 py-1 text-lg font-medium text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white"
               onClick={handleGetMyTop}
             >
               Get My Profile
             </div>
           </div>
+          {typingArr.length > 0 && (
+            <div className="mb-4 flex flex-col items-center">
+              <span>
+                <Typewriter
+                  words={typingArr}
+                  loop={2}
+                  cursor
+                  cursorStyle="_"
+                  typeSpeed={50}
+                  deleteSpeed={5}
+                  delaySpeed={500}
+                />
+              </span>
+
+              <div className="h4 my-4">
+                We're finding your matches! Please come back in one year.
+              </div>
+            </div>
+          )}
           <div className="flex justify-around">
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               {topArtists.map((artist, i) => {
                 return (
                   <div key={`artist-${i}`}>
@@ -107,28 +139,31 @@ const WithSpotify: NextPage = () => {
                   </div>
                 );
               })}
-            </div>
-            <div className="flex flex-col">
-              <div className="h5 mb-4">Listened the most</div>
-              {topTracks.map((track, i) => {
-                return (
-                  <div key={`track-${i}`} className="mb-3 flex">
-                    <img
-                      src={track.album.images[2].url}
-                      width={32}
-                      height={32}
-                      alt="album cover"
-                      className="mr-4"
-                    ></img>
-                    {i + 1}.<span className="mr-1"> {track.name} </span> -
-                    <span className="ml-1 text-gray-400">
-                      {" "}
-                      {track.artists[0].name}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            </div> */}
+            {topTracks.length > 0 && (
+              <div className="flex flex-col">
+                <div className="h5 mb-4">Listened the most</div>
+
+                {topTracks.map((track, i) => {
+                  return (
+                    <div key={`track-${i}`} className="mb-3 flex">
+                      <img
+                        src={track.album.images[2].url}
+                        width={32}
+                        height={32}
+                        alt="album cover"
+                        className="mr-4"
+                      ></img>
+                      {i + 1}.<span className="mr-1"> {track.name} </span> -
+                      <span className="ml-1 text-gray-400">
+                        {" "}
+                        {track.artists[0].name}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </motion.div>

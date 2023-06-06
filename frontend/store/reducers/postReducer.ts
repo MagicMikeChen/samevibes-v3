@@ -4,6 +4,7 @@ import { demoPosts, hiddenDemoPost } from '../../fakeData/fakePosts';
 const initialState = {
   profilePosts: [
     {
+      _id: '',
       postId: '',
       userId: '',
       userName: '',
@@ -30,6 +31,7 @@ const initialState = {
   ],
   posts: [
     {
+      _id: '',
       postId: '',
       userId: '',
       userName: '',
@@ -55,6 +57,7 @@ const initialState = {
     },
   ],
   post: {
+    _id: '',
     postId: '',
     userId: '',
     userName: '',

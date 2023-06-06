@@ -6,7 +6,12 @@ import Post from '../models/postModel.js';
 // @access  Public
 export const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({});
-  res.json(posts);
+  if (posts) {
+    res.json(posts);
+  } else {
+    res.status(404);
+    throw new Error('Post not found');
+  }
 });
 
 // @desc    Get single post
